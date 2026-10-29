@@ -1,0 +1,145 @@
+[
+  {
+    "id": "EXP-01",
+    "title": "Identificar dispositivo y revisión",
+    "physical": true,
+    "status": "PENDING",
+    "evidence": [
+      {
+        "source": "DOCUMENTATION",
+        "description": "Fichas públicas: BT 5.1, 800 m, 6 cascos, IP67; FCC ID y SoC no encontrados (docs/01)",
+        "capturedAt": "2026-10-29"
+      }
+    ],
+    "result": null,
+    "nextStep": "Ejecutar con el EJEAS V6 Pro real (docs/07-experimentos.md)",
+    "device": null
+  },
+  {
+    "id": "EXP-02",
+    "title": "Detectar perfiles Bluetooth disponibles",
+    "physical": true,
+    "status": "PENDING",
+    "evidence": [
+      {
+        "source": "DOCUMENTATION",
+        "description": "Funciones declaradas implican HFP/A2DP/AVRCP; V6 Pro+ anuncia BLE (sin detalle)",
+        "capturedAt": "2026-10-29"
+      }
+    ],
+    "result": null,
+    "nextStep": "Ejecutar con el EJEAS V6 Pro real (docs/07-experimentos.md)",
+    "device": null
+  },
+  {
+    "id": "EXP-03",
+    "title": "Reproducir audio desde el teléfono",
+    "physical": true,
+    "status": "PENDING",
+    "evidence": [],
+    "result": null,
+    "nextStep": "Ejecutar con el EJEAS V6 Pro real (docs/07-experimentos.md)",
+    "device": null
+  },
+  {
+    "id": "EXP-04",
+    "title": "Capturar audio desde el micrófono del intercomunicador",
+    "physical": true,
+    "status": "PENDING",
+    "evidence": [],
+    "result": null,
+    "nextStep": "Ejecutar con el EJEAS V6 Pro real (docs/07-experimentos.md)",
+    "device": null
+  },
+  {
+    "id": "EXP-05",
+    "title": "Comprobar activación mediante botón",
+    "physical": true,
+    "status": "PENDING",
+    "evidence": [
+      {
+        "source": "DOCUMENTATION",
+        "description": "Ficha V6 Pro declara 'voice assistant'; manual V6 Pro Plus: Teléfono 5 s = emparejar, 3 s = rellamada; sin gesto de asistente localizado",
+        "capturedAt": "2026-10-29"
+      }
+    ],
+    "result": null,
+    "nextStep": "Ejecutar con el EJEAS V6 Pro real (docs/07-experimentos.md)",
+    "device": null
+  },
+  {
+    "id": "EXP-06",
+    "title": "Iniciar una conversación con IA",
+    "physical": true,
+    "status": "PENDING",
+    "evidence": [
+      {
+        "source": "SIMULATION",
+        "description": "AnthropicMappingTest: petición a /v1/messages con modelo, tools, effort low y fallbacks; parseo de tool_use (servidor simulado)",
+        "capturedAt": "2026-10-29"
+      }
+    ],
+    "result": null,
+    "nextStep": "Ejecutar con el EJEAS V6 Pro real (docs/07-experimentos.md)",
+    "device": null
+  },
+  {
+    "id": "EXP-07",
+    "title": "Ejecutar una herramienta sencilla",
+    "physical": true,
+    "status": "PENDING",
+    "evidence": [
+      {
+        "source": "SIMULATION",
+        "description": "LocalIntentModelTest/OrchestratorTest: '¿Qué hora es?' → current_time por fast path",
+        "capturedAt": "2026-10-29"
+      }
+    ],
+    "result": null,
+    "nextStep": "Ejecutar con el EJEAS V6 Pro real (docs/07-experimentos.md)",
+    "device": null
+  },
+  {
+    "id": "EXP-08",
+    "title": "Guardar una idea en Control",
+    "physical": true,
+    "status": "PENDING",
+    "evidence": [
+      {
+        "source": "SIMULATION",
+        "description": "scripts/e2e_control.sh: frase de radar → orquestador → HttpControlClient → control-bridge 201; contexto conservado",
+        "capturedAt": "2026-10-29",
+        "artifact": "docs/07-experimentos.md"
+      }
+    ],
+    "result": null,
+    "nextStep": "Ejecutar con el EJEAS V6 Pro real (docs/07-experimentos.md)",
+    "device": null
+  },
+  {
+    "id": "EXP-09",
+    "title": "Medir latencia",
+    "physical": true,
+    "status": "PENDING",
+    "evidence": [
+      {
+        "source": "SIMULATION",
+        "description": "gradle :core:bench sin API key: fast path 0–1 ms p50/p90 (n=3); nube no medida",
+        "capturedAt": "2026-10-29"
+      }
+    ],
+    "result": null,
+    "nextStep": "Ejecutar con el EJEAS V6 Pro real (docs/07-experimentos.md)",
+    "device": null
+  },
+  {
+    "id": "EXP-10",
+    "title": "Probar reconexión, interrupciones y recuperación de fallos",
+    "physical": true,
+    "status": "PENDING",
+    "evidence": [],
+    "result": null,
+    "nextStep": "Ejecutar con el EJEAS V6 Pro real (docs/07-experimentos.md)",
+    "device": null
+  }
+]
