@@ -53,6 +53,13 @@ class LocalIntentModelTest {
     }
 
     @Test
+    fun fillersAreIgnored() {
+        val c = route("Oye, apunta que mañana revise la presión de las llantas").toolCalls.single()
+        assertEquals("dictate_note", c.name)
+        assertEquals("mañana revise la presión de las llantas", c.arguments["text"])
+    }
+
+    @Test
     fun openQuestionsGoToCloud() {
         assertEquals(LocalIntentModel.NO_MATCH, route("Explícame brevemente qué es un transformer").stopReason)
     }

@@ -1,0 +1,55 @@
+openapi: 3.1.0
+info:
+  title: Control v1 — contrato para el asistente de voz EJEAS
+  version: 0.1.0
+  description: >
+    Contrato mínimo que consume la app (HttpControlClient). Autenticación Bearer;
+    cada ruta exige un scope. Control real puede implementarlo directamente o
+    detrás de este puente (control-bridge), que además reenvía registros por webhook firmado.
+servers:
+  - url: http://127.0.0.1:8787
+security:
+  - bearer: []
+components:
+  securitySchemes:
+    bearer: { type: http, scheme: bearer }
+  schemas:
+    CaptureContext:
+      type: object
+      required: [utterance, mode, capturedAt, sessionId]
+      properties:
+        utterance: { type: string, description: Frase original dictada }
+        mode: { type: string, enum: [DRIVING, STOPPED] }
+        capturedAt: { type: string, format: date-time }
+        sessionId: { type: string }
+        source: { type: string, example: ejeas-v6-pro-voice }
+    IdeaInput:
+      type: object
+      required: [text]
+      properties:
+        text: { type: string, maxLength: 4000 }
+        tags: { type: array, items: { type: string }, maxItems: 20 }
+        context: { $ref: "#/components/schemas/CaptureContext" }
+        researchLater: { type: boolean, default: true }
+    Created:
+      type: object
+      properties: { id: { type: string }, status: { type: string } }
+paths:
+  /v1/ideas:
+    post: { summary: Guardar idea, x-scope: control.ideas.write, requestBody: { content: { application/json: { schema: { $ref: "#/components/schemas/IdeaInput" } } } }, responses: { "201": { description: Creada, content: { application/json: { schema: { $ref: "#/components/schemas/Created" } } } } } }
+    get: { summary: Últimas ideas, x-scope: control.ideas.read, responses: { "200": { description: OK } } }
+  /v1/radar/ideas:
+    post: { summary: Enviar idea a China Opportunity Radar, x-scope: control.radar.write, requestBody: { content: { application/json: { schema: { $ref: "#/components/schemas/IdeaInput" } } } }, responses: { "201": { description: Creada } } }
+    get: { summary: Ideas del radar, x-scope: control.radar.read, responses: { "200": { description: OK } } }
+  /v1/notes:
+    post: { summary: Nota dictada, x-scope: control.notes.write, requestBody: { content: { application/json: { schema: { type: object, required: [text], properties: { text: { type: string }, context: { $ref: "#/components/schemas/CaptureContext" } } } } } }, responses: { "201": { description: Creada } } }
+  /v1/tasks:
+    post: { summary: Crear tarea o recordatorio, x-scope: control.tasks.write, requestBody: { content: { application/json: { schema: { type: object, required: [title], properties: { title: { type: string }, due: { type: string, format: date-time }, trigger: { type: string, example: al llegar a casa }, context: { $ref: "#/components/schemas/CaptureContext" } } } } } }, responses: { "201": { description: Creada } } }
+  /v1/tasks/today:
+    get: { summary: Pendientes de hoy, x-scope: control.tasks.read, responses: { "200": { description: "{items:[{id,title,due,trigger}]}" } } }
+  /v1/knowledge/query:
+    post: { summary: Consultar agente de conocimiento, x-scope: control.knowledge.read, requestBody: { content: { application/json: { schema: { type: object, required: [question], properties: { question: { type: string } } } } } }, responses: { "200": { description: "{answer, sources[]}" } } }
+  /v1/results:
+    post: { summary: Control publica un resumen de investigación, x-scope: control.results.write, responses: { "201": { description: Creado } } }
+  /v1/results/recent:
+    get: { summary: Resultados recientes, x-scope: control.results.read, parameters: [{ name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 10 } }], responses: { "200": { description: "{items:[{id,title,summary,updatedAt}]}" } } }

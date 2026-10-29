@@ -1,0 +1,13 @@
+{
+  "name": "control-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Puente de referencia hacia Control: API con tokens y scopes para el asistente de voz del EJEAS V6 Pro.",
+  "type": "module",
+  "engines": { "node": ">=22.18" },
+  "scripts": {
+    "start": "node src/server.ts",
+    "token": "node src/tokens.ts",
+    "test": "node --test test/*.test.ts"
+  }
+}

@@ -22,3 +22,15 @@ dependencies {
 }
 
 tasks.test { useJUnitPlatform() }
+
+tasks.register<JavaExec>("bench") {
+    group = "verification"
+    description = "Latencia del orquestador (EXP-09, parte de software)."
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("mx.alan.intercom.core.bench.LatencyBenchKt")
+    jvmArgs("-Dstdout.encoding=UTF-8")
+    args(
+        (project.findProperty("benchModel") as String?) ?: "claude-opus-5-5",
+        (project.findProperty("benchReps") as String?) ?: "5",
+    )
+}

@@ -44,7 +44,7 @@ class SaveIdeaTool(private val control: ControlClient) : VoiceTool {
 
     override fun execute(args: Map<String, Any?>, ctx: ToolContext): ToolOutput {
         val r = control.saveIdea(IdeaInput(args.requireString("text"), tagsOf(args), ctx.capture()))
-        return ToolOutput(if (r.queuedOffline) "Idea guardada sin conexión; se sincroniza después (id ${r.id})." else "Idea guardada (id ${r.id}).")
+        return ToolOutput(if (r.queuedOffline) "Idea guardada sin conexión; se sincroniza después." else "Idea guardada.")
     }
 }
 
@@ -60,7 +60,7 @@ class SendToRadarTool(private val control: ControlClient) : VoiceTool {
 
     override fun execute(args: Map<String, Any?>, ctx: ToolContext): ToolOutput {
         val r = control.sendToRadar(IdeaInput(args.requireString("text"), tagsOf(args) + "radar", ctx.capture()))
-        return ToolOutput(if (r.queuedOffline) "Enviado al radar sin conexión; se sincroniza después." else "Enviado al radar (id ${r.id}).")
+        return ToolOutput(if (r.queuedOffline) "Enviado al radar sin conexión; se sincroniza después." else "Enviado al radar.")
     }
 }
 
@@ -80,7 +80,7 @@ class CreateTaskTool(private val control: ControlClient) : VoiceTool {
 
     override fun execute(args: Map<String, Any?>, ctx: ToolContext): ToolOutput {
         val r = control.createTask(TaskInput(args.requireString("title"), args.optString("due"), args.optString("trigger"), ctx.capture()))
-        return ToolOutput("Tarea creada (id ${r.id}${if (r.queuedOffline) ", pendiente de sincronizar" else ""}).")
+        return ToolOutput(if (r.queuedOffline) "Tarea creada, pendiente de sincronizar." else "Tarea creada.")
     }
 }
 
@@ -96,7 +96,7 @@ class DictateNoteTool(private val control: ControlClient) : VoiceTool {
 
     override fun execute(args: Map<String, Any?>, ctx: ToolContext): ToolOutput {
         val r = control.addNote(NoteInput(args.requireString("text"), ctx.capture()))
-        return ToolOutput("Nota registrada (id ${r.id}).")
+        return ToolOutput(if (r.queuedOffline) "Nota registrada, pendiente de sincronizar." else "Nota registrada.")
     }
 }
 
@@ -161,7 +161,7 @@ class StartResearchTool(private val control: ControlClient) : VoiceTool {
 
     override fun execute(args: Map<String, Any?>, ctx: ToolContext): ToolOutput {
         val r = control.createTask(TaskInput("Investigar a fondo: ${args.requireString("topic")}", null, "research", ctx.capture()))
-        return ToolOutput("Investigación encolada en Control (id ${r.id}).")
+        return ToolOutput("Investigación encolada en Control.")
     }
 }
 

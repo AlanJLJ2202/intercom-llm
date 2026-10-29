@@ -41,6 +41,9 @@ class LocalIntentModel : ChatModel {
         Rule(Regex("""^(?:registra|graba|toma|guarda)\s+(?:una\s+)?nota(?:\s+de\s+voz)?[\s:,.-]*(.+)$""")) {
             call("dictate_note", "text" to it.groupValues[1].trim())
         },
+        Rule(Regex("""^(?:apunta|anota)\s+que\s+(.+)$""")) {
+            call("dictate_note", "text" to cleanTail(it.groupValues[1]))
+        },
         Rule(Regex("""^recuerdame\s+(.+?)\s+(al llegar a casa|al llegar al trabajo|cuando llegue a casa|cuando me detenga|manana|en la noche|esta noche|mas tarde)$""")) {
             call("create_task", "title" to cleanTail(it.groupValues[1]), "trigger" to it.groupValues[2])
         },
@@ -53,7 +56,7 @@ class LocalIntentModel : ChatModel {
         return when (val last = request.messages.lastOrNull()) {
             is ChatMessage.ToolResults -> ModelTurn(summarize(last), emptyList(), "end_turn")
             is ChatMessage.User -> {
-                val norm = normalize(last.text)
+                val norm = normalize(last.text).replace(FILLER, "")
                 val allowed = request.tools.map { it.name }.toSet()
                 rules.firstNotNullOfOrNull { r -> r.regex.find(norm)?.let(r.build) }
                     ?.takeIf { it.name in allowed }
@@ -84,6 +87,9 @@ class LocalIntentModel : ChatModel {
 
     companion object {
         const val NO_MATCH = "no_match"
+
+        /** Muletillas iniciales que no cambian la intención ("oye, …", "a ver, …"). */
+        private val FILLER = Regex("""^(?:(?:oye|a ver|asistente|ok|okay|bueno)[\s,]+)+""")
 
         private fun stripOuterPunct(s: String) = s.trim().trimEnd('.', '!', '?', ',').trimStart('¿', '¡')
 
