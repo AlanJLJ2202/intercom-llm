@@ -1,0 +1,12 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.venv/
+control-bridge/data/
+experiments/evidence/private/
